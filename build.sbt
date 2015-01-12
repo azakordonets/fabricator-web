@@ -4,14 +4,23 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.1"
+lazy val commonSettings = Seq(
+
+    scalaVersion := "2.10.4",
+
+    crossScalaVersions := Seq("2.10.4", "2.11.4"),
+
+    scalacOptions := Seq("-unchecked", "-deprecation", "-feature", "-encoding", "utf8")
+
+)
 
 resolvers += "Fabricator" at "http://dl.bintray.com/biercoff/Fabricator"
+
+libraryDependencies += "com.github.azakordonets" % "fabricator_2.10" % "1.0.1"
 
 libraryDependencies ++= Seq(
     jdbc,
     anorm,
     cache,
-    ws,
-    libraryDependencies += "com.github.azakordonets" % "fabricator_2.10" % "1.0.1"
+    ws
 )
