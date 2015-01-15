@@ -4,6 +4,6 @@ deploy:
   provider: heroku
   api_key:
     secure: TA7E7H62GO1Y7cvuGE0UEDckA7cUfnK6+9myyaNa2ogG27lyVLTYJpJtGLbww6jIIQZuWzjJi/wvI1ZAHYcNJ58Ro5EFlidkdBrThUjWysisYCLHzaKNYcAJCpY3rv4KClBoruhLtlIG4kwU6EDUJGVaJo4cHzwbatxlz4QcPPw=
-  app: still-waters-9882
+  app: fabricator-web
   on:
     repo: azakordonets/fabricator-web
