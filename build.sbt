@@ -14,7 +14,7 @@ lazy val commonSettings = Seq(
 
 )
 
-herokuAppName in Compile := "still-waters-9882"
+herokuAppName in Compile := "fabricator-web"
 
 resolvers += "Fabricator" at "http://dl.bintray.com/biercoff/Fabricator"
 
