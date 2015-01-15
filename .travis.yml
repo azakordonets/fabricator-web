@@ -1,5 +1,6 @@
 language: scala
-script: sbt test
+script: sbt clean coverage test
+after_success: sbt coveralls
 deploy:
   provider: heroku
   api_key:
@@ -7,3 +8,6 @@ deploy:
   app: fabricator-web
   on:
     repo: azakordonets/fabricator-web
+env:
+  global:
+    secure: GrXvr6LlbQZq3wWZVfluOA0NaxlQ6klSd+Dj04hlb6MK0YFFlKJY0PidT6aSQcIFYUsW1iPF1ZEoMRnAlOTtjuwukhl7axrYpyhehGU5zInM9qynfdPbosZi9rWHW5DZhxzAWU5T0nQhwHXaoSvww+mmsWgnkfphWC85xtEWrOw=

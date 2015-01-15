@@ -2,6 +2,9 @@ resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releas
 
 resolvers += Resolver.url("heroku-sbt-plugin-releases", url("http://dl.bintray.com/heroku/sbt-plugins/"))(Resolver.ivyStylePatterns)
 
+resolvers += Classpaths.sbtPluginReleases
+
+
 // Heroku plugin
 addSbtPlugin("com.heroku" % "sbt-heroku" % "0.3.0")
 
@@ -21,3 +24,9 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-rjs" % "1.0.1")
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.0.0")
+
+// coverage plugins
+
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.0.1")
+
+addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.0.0.BETA1")
