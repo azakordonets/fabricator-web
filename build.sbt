@@ -14,6 +14,8 @@ lazy val commonSettings = Seq(
 
 )
 
+herokuAppName in Compile := "still-waters-9882"
+
 resolvers += "Fabricator" at "http://dl.bintray.com/biercoff/Fabricator"
 
 libraryDependencies += "com.github.azakordonets" % "fabricator_2.10" % "1.0.1"

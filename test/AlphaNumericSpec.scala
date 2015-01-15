@@ -1,3 +1,5 @@
+import java.nio.charset.Charset
+
 import org.junit.runner._
 import org.specs2.runner._
 import play.api.test._
@@ -32,13 +34,13 @@ class AlphaNumericSpec extends PlaySpecification {
       contentAsJson(result).\("value").as[Int] must be >= 100
     }
 
-    "return random int number in range [100, 500] with max, min parameter included" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/integer?min=100&max=500"))
+    "return random int number in range [100, 3600] with max, min parameter included" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/integer?min=100&max=3600"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       contentAsJson(result).\("value").as[Int] must be >= 100
-      contentAsJson(result).\("value").as[Int] must be <= 500
+      contentAsJson(result).\("value").as[Int] must be <= 3600
     }
 
     "return Sequence of random int numbers" in new WithApplication {
@@ -89,13 +91,13 @@ class AlphaNumericSpec extends PlaySpecification {
       contentAsJson(result).\("value").as[Double] must be >= 100.0
     }
 
-    "return random Double number in range [100, 500] with max, min parameter included" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/double?min=100&max=500"))
+    "return random Double number in range [100, 3600] with max, min parameter included" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/double?min=100&max=3600"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       contentAsJson(result).\("value").as[Double] must be >= 100.0
-      contentAsJson(result).\("value").as[Double] must be <= 500.0
+      contentAsJson(result).\("value").as[Double] must be <= 3600.0
     }
 
     "return random Double number with accuracy = 3" in new WithApplication {
@@ -167,8 +169,8 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
-      assert(responseResult.length == 100)
-      for (string <- responseResult) assert(string.length == 30)
+      responseResult should have size (100)
+      for (string <- responseResult) string must have size (30)
     }
 
     "return Sequence of random Strings with custom length of 100 symbols" in new WithApplication {
@@ -219,7 +221,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
-      assert(responseResult.length == 100)
+      responseResult should have size (100)
       for (hash <- responseResult) hash must have size(40)
     }
 
@@ -233,6 +235,127 @@ class AlphaNumericSpec extends PlaySpecification {
       for (hash <- responseResult) hash must have size (100)
     }
 
+  }
+
+  "REST API /api/v1/guid" should {
+
+    "return random Guid with default length of 36 " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/guid"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[String].get
+      responseResult must have size (36)
+      responseResult must beMatching("\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}")
+    }
+
+    "return random Guid with custom length of 2000 " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/guid?length=2000"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[String].get
+      responseResult must have size (39)
+    }
+
+    "return random Guid with default length of 36 symbols as a text response" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/guid?json=false"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result).mkString
+      responseResult must have size (38)
+    }
+
+    "return Sequence of random Strings with default length of 36 symbols" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/guid?amount=100"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult should have size (100)
+      for (guid <- responseResult) guid must have size (36)
+    }
+
+    "return Sequence of random Strings with custom length of 100 symbols" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/guid?amount=100&length=100"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult must have size (100)
+      for (guid <- responseResult) {
+        guid must have size (38)
+        guid must beMatching("\\w{8}-\\w{4}-\\w{4,6}-\\w{4}-\\w{12}")
+      }
+    }
+  }
+
+  "REST API /api/v1/letterify" should {
+
+    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/letterify"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/html")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain ("For request 'GET /api/v1/letterify' [Missing parameter: inputString]")
+    }
+
+    "return random String with replaced ??? into random letters " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/letterify?inputString=????21312"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[String].get
+      responseResult must have size ("????21312".length)
+      responseResult must beMatching("\\w{4}\\d{5}")
+    }
+  }
+
+  "REST API /api/v1/nummerify" should {
+
+    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/numerify"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/html")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain ("For request 'GET /api/v1/numerify' [Missing parameter: inputString]")
+    }
+
+    "return random String with replaced ### into random numbers " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/numerify?inputString=###ABC"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[String].get
+      responseResult must have size ("###ABC".length)
+      responseResult must beMatching("\\d{3}\\w{3}")
+    }
+  }
+
+  "REST API /api/v1/botify" should {
+
+    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/botify"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/html")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain ("For request 'GET /api/v1/botify' [Missing parameter: inputString]")
+    }
+
+    "return random String with replaced ### into random numbers " in new WithApplication {
+      val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
+      val Some(result) = route(FakeRequest(GET, "/api/v1/botify?inputString="+inputParameters))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[String].get
+      responseResult must have size ("???###".length)
+      responseResult must beMatching("\\w{3}\\d{3}")
+    }
   }
 
 }
