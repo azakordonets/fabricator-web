@@ -386,18 +386,20 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must have size ("????21312".length)
       responseResult must beMatching("\\w{4}\\d{5}")
     }
+
+    "return random String with replaced ### into random numbers as plain text" in new WithApplication {
+      val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
+      val Some(result) = route(FakeRequest(GET, "/api/v1/letterify?json=false&inputString=???ABC"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must have size ("???ABC".length + 2)
+      responseResult must beMatching("\"\\w{6}\"")
+    }
   }
 
   "REST API /api/v1/nummerify" should {
-
-    "return 400 if inputString is not specified or misspelled " in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/numerify"))
-      status(result) must equalTo(BAD_REQUEST)
-      contentType(result) must beSome("text/html")
-      charset(result) must beSome("utf-8")
-      val responseResult = contentAsString(result)
-      responseResult must contain ("For request 'GET /api/v1/numerify' [Missing parameter: inputString]")
-    }
 
     "return random String with replaced ### into random numbers " in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/numerify?inputString=###ABC"))
@@ -408,18 +410,30 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must have size ("###ABC".length)
       responseResult must beMatching("\\d{3}\\w{3}")
     }
-  }
 
-  "REST API /api/v1/botify" should {
-
+    "return random String with replaced ### into random numbers as plain text" in new WithApplication {
+      val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
+      val Some(result) = route(FakeRequest(GET, "/api/v1/numerify?json=false&inputString=???###"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must have size ("???###".length + 2)
+      responseResult must beMatching("\"\\w{3}\\d{3}\"")
+    }
+    
     "return 400 if inputString is not specified or misspelled " in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/botify"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/numerify"))
       status(result) must equalTo(BAD_REQUEST)
       contentType(result) must beSome("text/html")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result)
-      responseResult must contain ("For request 'GET /api/v1/botify' [Missing parameter: inputString]")
+      responseResult must contain ("For request 'GET /api/v1/numerify' [Missing parameter: inputString]")
     }
+
+  }
+
+  "REST API /api/v1/botify" should {
 
     "return random String with replaced ### into random numbers " in new WithApplication {
       val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
@@ -431,6 +445,28 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must have size ("???###".length)
       responseResult must beMatching("\\w{3}\\d{3}")
     }
+
+    "return random String with replaced ### into random numbers as plain text" in new WithApplication {
+      val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
+      val Some(result) = route(FakeRequest(GET, "/api/v1/botify?json=false&inputString="+inputParameters))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must have size ("???###".length + 2)
+      responseResult must beMatching("\"\\w{3}\\d{3}\"")
+    }
+    
+    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/botify"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/html")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain ("For request 'GET /api/v1/botify' [Missing parameter: inputString]")
+    }
+
+    
   }
 
 }

@@ -16,6 +16,8 @@ lazy val commonSettings = Seq(
 
 ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages := "<empty>;controllers\\..*Reverse.*"
 
+ScoverageSbtPlugin.ScoverageKeys.coverageExcludedFiles := "Application.scala; *.template.scala"
+
 herokuAppName in Compile := "fabricator-web"
 
 resolvers += "Fabricator" at "http://dl.bintray.com/biercoff/Fabricator"
