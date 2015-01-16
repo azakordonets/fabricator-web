@@ -3,15 +3,20 @@
 # ~~~~
 
 # Home page
-GET     /                                  controllers.Application.index
-GET     /api/v1/integer                    controllers.AlphaNumericBack.integer(min: Int ?= 0, max: Int ?= 0, json:Boolean ?= true, amount: Int ?= 1)
-GET     /api/v1/double                     controllers.AlphaNumericBack.double(min: Double ?= 0.0, max: Double ?= 0.0, json:Boolean ?= true, accuracy: Int ?= 1, amount: Int ?= 1)
-GET     /api/v1/string                     controllers.AlphaNumericBack.string(length: Int ?= 30, json:Boolean ?= true , amount: Int ?= 1)
-GET     /api/v1/hash                       controllers.AlphaNumericBack.hash(length: Int ?= 40, json:Boolean ?= true , amount: Int ?= 1)
-GET     /api/v1/guid                       controllers.AlphaNumericBack.guid(length: Int ?= 5, json:Boolean ?= true , amount: Int ?= 1)
-GET     /api/v1/letterify                  controllers.AlphaNumericBack.letterify(inputString: String, json:Boolean ?= true )
-GET     /api/v1/numerify                   controllers.AlphaNumericBack.numerify(inputString: String, json:Boolean ?= true )
-GET     /api/v1/botify                     controllers.AlphaNumericBack.botify(inputString: String, json:Boolean ?= true )
+GET        /                              controllers.Application.index
+# Alphanumeric
+GET        /api/v1/alpha/integer          controllers.AlphaNumericBack.integer(min: Int ?= 0, max: Int ?= 0, json:Boolean ?= true, amount: Int ?= 1)
+GET        /api/v1/alpha/double           controllers.AlphaNumericBack.double(min: Double ?= 0.0, max: Double ?= 0.0, json:Boolean ?= true, accuracy: Int ?= 1, amount: Int ?= 1)
+GET        /api/v1/alpha/string           controllers.AlphaNumericBack.string(length: Int ?= 30, json:Boolean ?= true , amount: Int ?= 1)
+GET        /api/v1/alpha/hash             controllers.AlphaNumericBack.hash(length: Int ?= 40, json:Boolean ?= true , amount: Int ?= 1)
+GET        /api/v1/alpha/guid             controllers.AlphaNumericBack.guid(length: Int ?= 5, json:Boolean ?= true , amount: Int ?= 1)
+GET        /api/v1/alpha/letterify        controllers.AlphaNumericBack.letterify(inputString: String, json:Boolean ?= true )
+GET        /api/v1/alpha/numerify         controllers.AlphaNumericBack.numerify(inputString: String, json:Boolean ?= true )
+GET        /api/v1/alpha/botify           controllers.AlphaNumericBack.botify(inputString: String, json:Boolean ?= true )
+
+# Calendar
+GET        /api/v1/calendar/time           controllers.CalendarBack.time(twentyFourHours: Boolean ?= true, json:Boolean ?= true )
+GET        /api/v1/calendar/date           controllers.CalendarBack.date(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET        /assets/*file                  controllers.Assets.at(path="/public", file)
