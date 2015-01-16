@@ -49,9 +49,9 @@ object AlphaNumericBack extends Controller {
   }
   
   def integer(min: Int, max: Int, json: Boolean, amount: Int) = Action {
-    if (amount < 1) BadRequest("Amount cannot be less then 1 ")
     try {
-      if (amount == 1) {
+      if (amount < 1) BadRequest("Amount should be more then 1");
+      else if (amount == 1) {
         val generatedResult = generateInt(min, max)
         if (json) Ok(Json.toJson(Map("value" -> generatedResult))) else Ok(Json.toJson(generatedResult))
       } else {
@@ -65,9 +65,9 @@ object AlphaNumericBack extends Controller {
   }
 
   def double(min: Double, max: Double, json: Boolean, accuracy: Int, amount: Int) = Action {
-    if (amount < 1) BadRequest("Amount cannot be less then 1 ")
     try {
-      if (amount == 1) {
+      if (amount < 1) BadRequest("Amount should be more then 1")
+      else if (amount == 1) {
         val generatedResult = generateDouble(min, max, accuracy)
         if (json) Ok(Json.toJson(Map("value" -> generatedResult))) else Ok(Json.toJson(generatedResult))
       } else {
@@ -82,8 +82,8 @@ object AlphaNumericBack extends Controller {
 
 
   def string(length: Int, json: Boolean, amount: Int) = Action {
-    if (amount < 1) BadRequest("Amount cannot be less then 1 ")
-    if (amount == 1) {
+    if (amount < 1) BadRequest("Amount should be more then 1")
+    else if (amount == 1) {
       val result = if (length == 30) alpha.getString else alpha.getString(length)
       if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
     } else {
@@ -93,8 +93,8 @@ object AlphaNumericBack extends Controller {
   }
 
   def hash(length: Int, json: Boolean, amount: Int) = Action {
-    if (amount < 1) BadRequest("Amount cannot be less then 1 ")
-    if (amount == 1) {
+    if (amount < 1) BadRequest("Amount should be more then 1")
+    else if (amount == 1) {
       val result = if (length == 40) alpha.hash else alpha.hash(length)
       if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
     } else {
@@ -104,8 +104,8 @@ object AlphaNumericBack extends Controller {
   }
 
   def guid(length: Int, json: Boolean, amount: Int) = Action {
-    if (amount < 1) BadRequest("Amount cannot be less then 1 ")
-    if (amount == 1) {
+    if (amount < 1) BadRequest("Amount should be more then 1")
+    else if (amount == 1) {
       val result = if (length == 5) alpha.guid else alpha.guid(length)
       if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
     } else {

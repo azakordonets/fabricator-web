@@ -63,6 +63,31 @@ class AlphaNumericSpec extends PlaySpecification {
       assert(responseResult.length == 100)
       for (number <- responseResult) assert(number >= 100 && number <= 200)
     }
+
+    "return 400 response if min > max" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/integer?min=300&max=200"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Minimal number cannot be more then maximum")
+    }
+
+    "return 400 response if amount is < 1" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/integer?min=100&max=200&amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Amount should be more then 1")
+    }
+
+    "return 400 response in case of invalid argument" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/integer?min=abc&max=200&amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/html")
+      charset(result) must beSome("utf-8")
+    }
   }
 
   "REST API /api/v1/double" should {
@@ -132,6 +157,31 @@ class AlphaNumericSpec extends PlaySpecification {
         number must be <= 200.0
       }  
     }
+
+    "return 400 response if min > max" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/double?min=300.0&max=200.0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Minimal number cannot be more then maximum")
+    }
+
+    "return 400 response if amount is < 1" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/double?min=100.0&max=200.0&amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Amount should be more then 1")
+    }
+
+    "return 400 response in case of invalid argument" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/double?min=abc&max=200&amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/html")
+      charset(result) must beSome("utf-8")
+    }
   }
 
   "REST API /api/v1/string" should {
@@ -183,7 +233,14 @@ class AlphaNumericSpec extends PlaySpecification {
       for (string <- responseResult) string must have size (100)
     }
 
-
+    "return 400 response if amount is < 1" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/string?amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Amount should be more then 1")
+    }
   }
 
   "REST API /api/v1/hash" should {
@@ -233,6 +290,15 @@ class AlphaNumericSpec extends PlaySpecification {
       val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
       responseResult must have size (100)
       for (hash <- responseResult) hash must have size (100)
+    }
+
+    "return 400 response if amount is < 1" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/hash?amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Amount should be more then 1")
     }
 
   }
@@ -288,6 +354,15 @@ class AlphaNumericSpec extends PlaySpecification {
         guid must have size (38)
         guid must beMatching("\\w{8}-\\w{4}-\\w{4,6}-\\w{4}-\\w{12}")
       }
+    }
+
+    "return 400 response if amount is < 1" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/guid?amount=0"))
+      status(result) must equalTo(BAD_REQUEST)
+      contentType(result) must beSome("text/plain")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsString(result)
+      responseResult must contain("Amount should be more then 1")
     }
   }
 
