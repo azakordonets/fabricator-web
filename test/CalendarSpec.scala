@@ -39,7 +39,7 @@ class CalendarSpec extends PlaySpecification {
       val responseResult = contentAsString(result).replaceAll("\"","")
       val hour = responseResult.split(":")(0).toInt
       val minutes = responseResult.split(":")(1).toInt
-      hour must beBetween(0, 12)
+      hour must beBetween(0, 24)
       minutes must beBetween(0,60)
     }
   }
