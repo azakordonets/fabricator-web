@@ -412,8 +412,8 @@ class AlphaNumericSpec extends PlaySpecification {
     }
 
     "return random String with replaced ### into random numbers as plain text" in new WithApplication {
-      val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify?json=false&inputString=ABC###"))
+      val inputParameters = new String("ABC###".getBytes("UTF-8"), "UTF-8")
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify?json=false&inputString="+inputParameters))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
