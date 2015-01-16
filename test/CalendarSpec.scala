@@ -20,7 +20,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return random time value in 12 hour format" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/time?twentyFourHours=true"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/time?twentyFourHours=false"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
