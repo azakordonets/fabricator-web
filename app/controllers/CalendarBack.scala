@@ -1,12 +1,20 @@
 package controllers
 
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.Controller
+import play.api.mvc.Action
 
 object CalendarBack extends Controller {
 
   private val cal = fabricator.Calendar()
+
+  case class stringSeq(value: Seq[String])
   
+  case class stringList(value: List[String])
+
+  implicit def stringWrite = Json.writes[stringSeq]
+  implicit def stringListWrite = Json.writes[stringList]
+
   private def getDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String): String = (year, month, day, hour, minute) match {
     case (0, 0, 0, 0, 0) => cal.date(format)
     case (year, 0, 0, 0, 0) if year > 0 => {
@@ -37,6 +45,23 @@ object CalendarBack extends Controller {
     } catch {
       case e: IllegalAccessException => BadRequest(e.getMessage)
     }
+  }
+  
+  def dates(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String, json: Boolean, amount: Int) = Action {
+    if (amount < 1) BadRequest("Amount should be more then 1")
+    else if (amount == 1) {
+      val result = getDate(year, month, day, hour, minute, format)
+      if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
+    } else {
+      val result = Seq.fill(amount)(getDate(year, month, day, hour, minute, format))
+      if (json) Ok(Json.toJson(stringSeq(result))) else Ok(Json.toJson(result))
+    }
+  }
+  
+  def datesRange(config: String , json: Boolean) = Action {
+    val jsonConfig = Json.parse(s"""$config""")
+    val result = cal.datesRange(jsonConfig)
+    if (json) Ok(Json.toJson(stringList(result))) else Ok(Json.toJson(result))
   }
 
 

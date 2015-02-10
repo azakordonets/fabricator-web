@@ -49,7 +49,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[Array[Int]].get
-      assert(responseResult.length == 100)
+      responseResult should have size (100)
       assert(responseResult.isInstanceOf[Array[Int]])
     }
 
@@ -60,7 +60,18 @@ class AlphaNumericSpec extends PlaySpecification {
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[Array[Int]].get
       assert(responseResult.isInstanceOf[Array[Int]])
-      assert(responseResult.length == 100)
+      responseResult should have size (100)
+      for (number <- responseResult) assert(number >= 100 && number <= 200)
+    }
+
+    "return Sequence of random int numbers in range [100, 200] with step 2" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/integer?step=2&min=100&max=200"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[Int]].get
+      assert(responseResult.isInstanceOf[Array[Int]])
+      responseResult should have size (51)
       for (number <- responseResult) assert(number >= 100 && number <= 200)
     }
 
@@ -158,6 +169,20 @@ class AlphaNumericSpec extends PlaySpecification {
       }  
     }
 
+    "return Sequence of random Double numbers in range [100, 200] with step 2" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/double?step=2.0&min=100.0&max=200.0"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[Double]].get
+      assert(responseResult.isInstanceOf[Array[Double]])
+      responseResult must have size (51)
+      for (number <- responseResult) {
+        number must be >= 100.0
+        number must be <= 200.0
+      }
+    }
+
     "return 400 response if min > max" in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/double?min=300.0&max=200.0"))
       status(result) must equalTo(BAD_REQUEST)
@@ -233,6 +258,19 @@ class AlphaNumericSpec extends PlaySpecification {
       for (string <- responseResult) string must have size (100)
     }
 
+    "return Sequence of random Strings with custom length from 10 to 20 " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/string?amount=100&max=20&min=10"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult must have size (100)
+      for (string <- responseResult) {
+        string.length must be >= 10
+        string.length must be <= 20
+      }
+    }
+
     "return 400 response if amount is < 1" in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/string?amount=0"))
       status(result) must equalTo(BAD_REQUEST)
@@ -290,6 +328,19 @@ class AlphaNumericSpec extends PlaySpecification {
       val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
       responseResult must have size (100)
       for (hash <- responseResult) hash must have size (100)
+    }
+
+    "return Sequence of random Strings with custom length [20, 60] symbols" in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/hash?amount=100&min=20&max=60"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult must have size (100)
+      for (hash <- responseResult) {
+        hash.length must be >= 20
+        hash.length must be <= 60
+      }
     }
 
     "return 400 response if amount is < 1" in new WithApplication {
@@ -368,17 +419,17 @@ class AlphaNumericSpec extends PlaySpecification {
 
   "REST API /api/v1/alpha/letterify" should {
 
-    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+    "return 400 if pattern is not specified or misspelled " in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/letterify"))
       status(result) must equalTo(BAD_REQUEST)
       contentType(result) must beSome("text/html")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result)
-      responseResult must contain ("For request 'GET /api/v1/alpha/letterify' [Missing parameter: inputString]")
+      responseResult must contain ("For request 'GET /api/v1/alpha/letterify' [Missing parameter: pattern]")
     }
 
     "return random String with replaced ??? into random letters " in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/letterify?inputString=????21312"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/letterify?pattern=????21312"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -387,9 +438,9 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must beMatching("\\w{4}\\d{5}")
     }
 
-    "return random String with replaced ### into random numbers as plain text" in new WithApplication {
+    "return random String with replaced ??? into random chars as plain text" in new WithApplication {
       val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/letterify?json=false&inputString=???ABC"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/letterify?json=false&pattern=???ABC"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -397,12 +448,25 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must have size ("???ABC".length + 2)
       responseResult must beMatching("\"\\w{6}\"")
     }
+
+    "return Sequence of random String with replaced ??? into random letters " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/letterify?pattern=????21312&amount=100"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult must have size 100
+      for (string <- responseResult){
+        string must have size ("????21312".length)
+        string must beMatching("\\w{4}\\d{5}")
+      }
+    }
   }
 
   "REST API /api/v1/alpha/nummerify" should {
 
     "return random String with replaced ### into random numbers " in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify?inputString=###ABC"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify?pattern=###ABC"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -413,7 +477,7 @@ class AlphaNumericSpec extends PlaySpecification {
 
     "return random String with replaced ### into random numbers as plain text" in new WithApplication {
       val inputParameters = new String("ABC###".getBytes("UTF-8"), "UTF-8")
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify?json=false&inputString="+inputParameters))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify?json=false&pattern="+inputParameters))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -421,23 +485,36 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must have size ("ABC###".length + 2)
       responseResult must beMatching("\"\\w{3}\\d{3}\"")
     }
+
+    "return Seq of random String with replaced ### into random numbers " in new WithApplication {
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/numerify?pattern=###ABC&amount=100"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult must have size 100
+      for (string <- responseResult) {
+        string must have size ("###ABC".length)
+        string must beMatching("\\d{3}\\w{3}")
+      }
+    }
     
-    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+    "return 400 if pattern is not specified or misspelled " in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/numerify"))
       status(result) must equalTo(BAD_REQUEST)
       contentType(result) must beSome("text/html")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result)
-      responseResult must contain ("For request 'GET /api/v1/alpha/numerify' [Missing parameter: inputString]")
+      responseResult must contain ("For request 'GET /api/v1/alpha/numerify' [Missing parameter: pattern]")
     }
 
   }
 
   "REST API /api/v1/alpha/botify" should {
 
-    "return random String with replaced ### into random numbers " in new WithApplication {
+    "return random String with replaced ### into random numbers and ??? into random chars " in new WithApplication {
       val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/botify?inputString="+inputParameters))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/botify?pattern="+inputParameters))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -446,9 +523,9 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must beMatching("\\w{3}\\d{3}")
     }
 
-    "return random String with replaced ### into random numbers as plain text" in new WithApplication {
+    "return random String with replaced ### into random numbers and ??? into random chars as plain text" in new WithApplication {
       val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
-      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/botify?json=false&inputString="+inputParameters))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/botify?json=false&pattern="+inputParameters))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -456,14 +533,28 @@ class AlphaNumericSpec extends PlaySpecification {
       responseResult must have size ("???###".length + 2)
       responseResult must beMatching("\"\\w{3}\\d{3}\"")
     }
+
+    "return Seq of random String with replaced ### into random numbers and ??? into random chars " in new WithApplication {
+      val inputParameters = new String("???###".getBytes("UTF-8"), "UTF-8")
+      val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/range/botify?pattern="+inputParameters+"&amount=100"))
+      status(result) must equalTo(OK)
+      contentType(result) must beSome("application/json")
+      charset(result) must beSome("utf-8")
+      val responseResult = contentAsJson(result).\("value").validate[Array[String]].get
+      responseResult must have size 100
+      for (string <- responseResult) {
+        string must have size ("???###".length)
+        string must beMatching("\\w{3}\\d{3}")
+      }
+    }
     
-    "return 400 if inputString is not specified or misspelled " in new WithApplication {
+    "return 400 if pattern is not specified or misspelled " in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/alpha/botify"))
       status(result) must equalTo(BAD_REQUEST)
       contentType(result) must beSome("text/html")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result)
-      responseResult must contain ("For request 'GET /api/v1/alpha/botify' [Missing parameter: inputString]")
+      responseResult must contain ("For request 'GET /api/v1/alpha/botify' [Missing parameter: pattern]")
     }
 
     
