@@ -24,8 +24,8 @@ GET        /api/v1/alpha/range/botify               controllers.AlphaNumericBack
 
 # Calendar
 GET        /api/v1/calendar/time              controllers.CalendarBack.time(twentyFourHours: Boolean ?= true, json:Boolean ?= true )
-GET        /api/v1/calendar/date              controllers.CalendarBack.date(year: Int ?= 1900, month: Int ?=1, day: Int ?= 1, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
-GET        /api/v1/calendar/dates             controllers.CalendarBack.dates(year: Int ?= 1900, month: Int ?=1, day: Int ?= 1, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true , amount: Int ?= 100)
+GET        /api/v1/calendar/date              controllers.CalendarBack.date(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
+GET        /api/v1/calendar/dates             controllers.CalendarBack.dates(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true , amount: Int ?= 100)
 GET        /api/v1/calendar/datesRange        controllers.CalendarBack.datesRange(config: String , json: Boolean ?= true)
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                      controllers.Assets.at(path="/public", file)

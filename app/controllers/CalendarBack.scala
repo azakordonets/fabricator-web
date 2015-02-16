@@ -1,5 +1,6 @@
 package controllers
 
+import org.joda.time.IllegalInstantException
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.api.mvc.Action
@@ -15,21 +16,18 @@ object CalendarBack extends Controller {
   implicit def stringWrite = Json.writes[stringSeq]
   implicit def stringListWrite = Json.writes[stringList]
 
-  private def getDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String): String = (year, month, day, hour, minute) match {
-    case (0, 0, 0, 0, 0) => cal.date(format)
-    case (year, 0, 0, 0, 0) if year > 0 => {
-      val month = cal.month.toInt
-      cal.date(year, month.toInt, cal.day(year, month).toInt, cal.hour.toInt, cal.minute.toInt, format)
+  private def getDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String): String =  {
+    val finalYear = if (year == 0) cal.year.toInt else year
+    val finalMonth = if (month == 0) cal.month.toInt else month
+    val finalDay = if (day == 0) cal.day(finalYear, finalMonth).toInt else day
+    val finalHour = if (hour == 0) cal.hour.toInt else hour
+    val finalMinute = if (minute == 0) cal.minute.toInt else minute
+    try {
+      cal.date(finalYear, finalMonth, finalDay, finalHour, finalMinute, format)
+    } catch {
+      case e:IllegalInstantException => getDate(finalYear, finalMonth, finalDay+1, finalHour, finalMinute, format)
+      
     }
-    case (year, month, 0, 0, 0) if year > 0 && month > 0 =>
-      cal.date(year, month.toInt, cal.day(year, month).toInt, cal.hour.toInt, cal.minute.toInt, format)
-    case (year, month, day, 0, 0) if year > 0 && month > 0 && day > 0 =>
-      cal.date(year, month.toInt, day, cal.hour.toInt, cal.minute.toInt, format)
-    case (year, month, day, hour, 0) if year > 0 && month > 0 && day > 0 && hour >= 0 =>
-      cal.date(year, month.toInt, day, hour, cal.minute.toInt, format)
-    case (year, month, day, hour, minute) if year > 0 && month > 0 && day > 0 && hour >= 0 && minute > 0 =>
-      cal.date(year, month.toInt, day, hour, minute, format)
-    case _ => throw new IllegalArgumentException("Values should be more then 0")
   }
 
   def time(twentyFourHours: Boolean, json: Boolean) = Action {
@@ -59,7 +57,7 @@ object CalendarBack extends Controller {
   }
   
   def datesRange(config: String , json: Boolean) = Action {
-    val jsonConfig = Json.parse(s"""$config""")
+    val jsonConfig = Json.parse(config)
     val result = cal.datesRange(jsonConfig)
     if (json) Ok(Json.toJson(stringList(result))) else Ok(Json.toJson(result))
   }

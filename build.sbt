@@ -22,7 +22,7 @@ herokuAppName in Compile := "fabricator-web"
 
 resolvers += "Fabricator" at "http://dl.bintray.com/biercoff/Fabricator"
 
-libraryDependencies += "com.github.azakordonets" % "fabricator_2.10" % "1.0.2sbt"
+libraryDependencies += "com.github.azakordonets" % "fabricator_2.10" % "1.0.2"
 
 libraryDependencies ++= Seq(
     jdbc,
