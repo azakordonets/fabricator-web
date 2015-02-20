@@ -1,6 +1,7 @@
 package controllers
 
 import org.joda.time.IllegalInstantException
+import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.api.mvc.Action
@@ -13,7 +14,7 @@ object CalendarBack extends Controller {
   
   case class stringList(value: List[String])
 
-  implicit def stringWrite = Json.writes[stringSeq]
+  implicit def stringSeqWrite = Json.writes[stringSeq]
   implicit def stringListWrite = Json.writes[stringList]
 
   private def getDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String): String =  {
@@ -60,6 +61,17 @@ object CalendarBack extends Controller {
     val jsonConfig = Json.parse(config)
     val result = cal.datesRange(jsonConfig)
     if (json) Ok(Json.toJson(stringList(result))) else Ok(Json.toJson(result))
+  }
+  
+  def relativeDate(startPoint: String, years: Int, months: Int, weeks: Int, days: Int, hours: Int, minutes: Int, format: String,  json: Boolean) = Action {
+    var relativeDate = ""
+    if (startPoint.equals("")){
+      relativeDate = cal.dateRelative(years, months, weeks, days, hours, minutes, format)
+    }else {
+      val date = DateTimeFormat.forPattern(format).parseDateTime(startPoint)
+      relativeDate = cal.dateRelative(date, years, months, weeks, days, hours, minutes, format)
+    }
+    if (json) Ok(Json.toJson(Map("value" -> relativeDate))) else Ok(Json.toJson(relativeDate))
   }
 
 
