@@ -14,7 +14,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("time").as[String]
       val hour = responseResult.split(":")(0).toInt
       val minutes = responseResult.split(":")(1).toInt
       hour must beBetween(0, 24)
@@ -26,7 +26,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("time").as[String]
       val hour = responseResult.split(":")(0).toInt
       val minutes = responseResult.split(":")(1).toInt
       hour must beBetween(0, 12)
@@ -52,7 +52,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("date").as[String]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val date = formatter.parseDateTime(responseResult)
       date.getYear must be equalTo 2000
@@ -65,7 +65,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("date").as[String]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val date = formatter.parseDateTime(responseResult)
       date.getYear must be equalTo 2000
@@ -78,7 +78,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("date").as[String]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       val date = formatter.parseDateTime(responseResult)
       val currentYear = new DateTime().getYear
@@ -92,7 +92,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("date").as[String]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
       val date = formatter.parseDateTime(responseResult)
       val currentYear = new DateTime().getYear
@@ -107,7 +107,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("date").as[String]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
       val date = formatter.parseDateTime(responseResult)
       val currentYear = new DateTime().getYear
@@ -125,7 +125,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("dates").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       for (response <- responseResult) {
         val date = formatter.parseDateTime(response)
@@ -140,7 +140,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("dates").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       responseResult must have size 100
       for (response <- responseResult) {
@@ -156,7 +156,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("dates").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       responseResult must have size 100
       for (response <- responseResult) {
@@ -173,7 +173,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("dates").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
       responseResult must have size 100
       for (response <- responseResult) {
@@ -191,7 +191,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("dates").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
       responseResult must have size 100
       for (response <- responseResult) {
@@ -210,7 +210,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("dates").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
       responseResult must have size 200
       for (response <- responseResult) {
@@ -230,7 +230,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[Array[String]]
+      val responseResult = contentAsJson(result).\("range").as[Array[String]]
       val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
       responseResult must have size 10
       for (response <- responseResult) {
@@ -249,7 +249,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusYears(2).toString("dd-MM-yyyy")
       responseResult must be equalTo expectedDate
     }
@@ -259,7 +259,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusMonths(2).toString("dd-MM-yyyy")
       responseResult must be equalTo expectedDate
     }
@@ -269,7 +269,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusWeeks(2).toString("dd-MM-yyyy")
       responseResult must be equalTo expectedDate
     }
@@ -279,7 +279,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusDays(2).toString("dd-MM-yyyy")
       responseResult must be equalTo expectedDate
     }
@@ -289,7 +289,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusHours(2).toString("dd-MM-yyyy HH:mm")
       responseResult must be equalTo expectedDate
     }
@@ -299,7 +299,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusMinutes(2).toString("dd-MM-yyyy HH:mm")
       responseResult must be equalTo expectedDate
     }
@@ -309,7 +309,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().minusYears(2).minusMonths(2).minusWeeks(2).minusDays(2).minusHours(2).minusMinutes(2).toString("dd-MM-yyyy HH:mm")
       responseResult must be equalTo expectedDate
     }
@@ -319,7 +319,7 @@ class CalendarSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("value").as[String]
+      val responseResult = contentAsJson(result).\("relative_date").as[String]
       val expectedDate = new DateTime().plusYears(3).plusMonths(3).plusWeeks(3).plusDays(3).plusHours(3).plusMinutes(3).toString("dd-MM-yyyy HH:mm")
       responseResult must be equalTo expectedDate
     }

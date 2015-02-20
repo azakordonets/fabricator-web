@@ -3,30 +3,37 @@
 # ~~~~
 
 # Home page
-GET        /                                  controllers.Application.index
+GET        /                                    controllers.Application.index
 # Alphanumeric
-GET        /api/v1/alpha/integer              controllers.AlphaNumericBack.integer(min: Int ?= 0, max: Int ?= 0, json:Boolean ?= true, amount: Int ?= 1)
-GET        /api/v1/alpha/double               controllers.AlphaNumericBack.double(min: Double ?= 0.0, max: Double ?= 0.0, json:Boolean ?= true, accuracy: Int ?= 1, amount: Int ?= 1)
-GET        /api/v1/alpha/string               controllers.AlphaNumericBack.string(length: Int ?= 30, json:Boolean ?= true , amount: Int ?= 1)
-GET        /api/v1/alpha/hash                 controllers.AlphaNumericBack.hash(length: Int ?= 40, json:Boolean ?= true , amount: Int ?= 1)
-GET        /api/v1/alpha/guid                 controllers.AlphaNumericBack.guid(length: Int ?= 5, json:Boolean ?= true , amount: Int ?= 1)
-GET        /api/v1/alpha/letterify            controllers.AlphaNumericBack.letterify(pattern: String, json:Boolean ?= true )
-GET        /api/v1/alpha/numerify             controllers.AlphaNumericBack.numerify(pattern: String, json:Boolean ?= true )
-GET        /api/v1/alpha/botify               controllers.AlphaNumericBack.botify(pattern: String, json:Boolean ?= true )
+GET        /api/v1/alpha/integer                controllers.AlphaNumericBack.integer(min: Int ?= 0, max: Int ?= 0, json:Boolean ?= true, amount: Int ?= 1)
+GET        /api/v1/alpha/double                 controllers.AlphaNumericBack.double(min: Double ?= 0.0, max: Double ?= 0.0, json:Boolean ?= true, accuracy: Int ?= 1, amount: Int ?= 1)
+GET        /api/v1/alpha/string                 controllers.AlphaNumericBack.string(length: Int ?= 30, json:Boolean ?= true , amount: Int ?= 1)
+GET        /api/v1/alpha/hash                   controllers.AlphaNumericBack.hash(length: Int ?= 40, json:Boolean ?= true , amount: Int ?= 1)
+GET        /api/v1/alpha/guid                   controllers.AlphaNumericBack.guid(length: Int ?= 5, json:Boolean ?= true , amount: Int ?= 1)
+GET        /api/v1/alpha/letterify              controllers.AlphaNumericBack.letterify(pattern: String, json:Boolean ?= true )
+GET        /api/v1/alpha/numerify               controllers.AlphaNumericBack.numerify(pattern: String, json:Boolean ?= true )
+GET        /api/v1/alpha/botify                 controllers.AlphaNumericBack.botify(pattern: String, json:Boolean ?= true )
 # Alphanumeric range
-GET        /api/v1/alpha/range/integer              controllers.AlphaNumericBack.integerRange(min: Int ?= 0, max: Int ?= 0, step: Int, json:Boolean ?= true)
-GET        /api/v1/alpha/range/double               controllers.AlphaNumericBack.doubleRange(min: Double ?= 0.0, max: Double ?= 0.0, step: Double ?= 1.0, json:Boolean ?= true)
-GET        /api/v1/alpha/range/string               controllers.AlphaNumericBack.strings(min: Int ?= 1, max: Int ?= 10, amount: Int ?= 10, json: Boolean ?= true)
-GET        /api/v1/alpha/range/hash                 controllers.AlphaNumericBack.hashesList(min: Int ?= 40, max: Int ?=40, amount: Int ?= 10, json: Boolean ?= true)
-GET        /api/v1/alpha/range/letterify            controllers.AlphaNumericBack.letterifyList(pattern: String, amount: Int ?= 10, json:Boolean ?= true )
-GET        /api/v1/alpha/range/numerify             controllers.AlphaNumericBack.numerifyList(pattern: String, amount: Int ?= 10, json:Boolean ?= true )
-GET        /api/v1/alpha/range/botify               controllers.AlphaNumericBack.botifyList(pattern: String, amount: Int ?= 10, json:Boolean ?= true )
+GET        /api/v1/alpha/range/integer          controllers.AlphaNumericBack.integerRange(min: Int ?= 0, max: Int ?= 0, step: Int, json:Boolean ?= true)
+GET        /api/v1/alpha/range/double           controllers.AlphaNumericBack.doubleRange(min: Double ?= 0.0, max: Double ?= 0.0, step: Double ?= 1.0, json:Boolean ?= true)
+GET        /api/v1/alpha/range/string           controllers.AlphaNumericBack.strings(min: Int ?= 1, max: Int ?= 10, amount: Int ?= 10, json: Boolean ?= true)
+GET        /api/v1/alpha/range/hash             controllers.AlphaNumericBack.hashesList(min: Int ?= 40, max: Int ?=40, amount: Int ?= 10, json: Boolean ?= true)
+GET        /api/v1/alpha/range/letterify        controllers.AlphaNumericBack.letterifyList(pattern: String, amount: Int ?= 10, json:Boolean ?= true )
+GET        /api/v1/alpha/range/numerify         controllers.AlphaNumericBack.numerifyList(pattern: String, amount: Int ?= 10, json:Boolean ?= true )
+GET        /api/v1/alpha/range/botify           controllers.AlphaNumericBack.botifyList(pattern: String, amount: Int ?= 10, json:Boolean ?= true )
 
 # Calendar
-GET        /api/v1/calendar/time              controllers.CalendarBack.time(twentyFourHours: Boolean ?= true, json:Boolean ?= true )
-GET        /api/v1/calendar/date              controllers.CalendarBack.date(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
-GET        /api/v1/calendar/dates             controllers.CalendarBack.dates(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true , amount: Int ?= 100)
-GET        /api/v1/calendar/datesRange        controllers.CalendarBack.datesRange(config: String , json: Boolean ?= true)
-GET        /api/v1/calendar/relativeDate      controllers.CalendarBack.relativeDate(startPoint: String ?= "", years: Int ?= 0, months: Int ?= 0, weeks: Int ?= 0, days: Int ?= 0, hours: Int ?= 0, minutes: Int ?= 0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
+GET        /api/v1/calendar/time                controllers.CalendarBack.time(twentyFourHours: Boolean ?= true, json:Boolean ?= true )
+GET        /api/v1/calendar/date                controllers.CalendarBack.date(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
+GET        /api/v1/calendar/dates               controllers.CalendarBack.dates(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true , amount: Int ?= 100)
+GET        /api/v1/calendar/datesRange          controllers.CalendarBack.datesRange(config: String , json: Boolean ?= true)
+GET        /api/v1/calendar/relativeDate        controllers.CalendarBack.relativeDate(startPoint: String ?= "", years: Int ?= 0, months: Int ?= 0, weeks: Int ?= 0, days: Int ?= 0, hours: Int ?= 0, minutes: Int ?= 0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
+
+# Contact
+GET        /api/v1/contact/name                 controllers.ContactBack.name(json:Boolean ?= true )
+
+# Finance
+GET        /api/v1/finance/creditcard           controllers.FinanceBack.creditCard(cardType: String ?= "master", json:Boolean ?= true )
+GET        /api/v1/finance/creditcards          controllers.FinanceBack.creditCards(cardType: String ?= "master", amount: Int ?= 10, json:Boolean ?= true )
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                      controllers.Assets.at(path="/public", file)
+GET        /assets/*file                        controllers.Assets.at(path="/public", file)

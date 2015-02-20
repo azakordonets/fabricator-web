@@ -9,17 +9,17 @@ object AlphaNumericBack extends Controller {
 
   private val alpha = fabricator.Alphanumeric()
   
-  case class integerSeq(value: Seq[Int])
-  
+  case class integerSeq(integers: Seq[Int])
+  case class doubleSeq(doubles: Seq[Double])
+  case class stringsSeq(strings: Seq[String])
+  case class hashesSeq(hashes: Seq[String])
+  case class guidSeq(guids: Seq[String])
+
+  implicit def stringWrite = Json.format[stringsSeq]
   implicit def integerWrite = Json.writes[integerSeq]
-  
-  case class doubleSeq(value: Seq[Double])
-
+  implicit def hashesWrite = Json.format[hashesSeq]
   implicit def doubleWrite = Json.writes[doubleSeq]
-  
-  case class stringSeq(value: Seq[String])
-
-  implicit def stringWrite = Json.writes[stringSeq]
+  implicit def guidsWrite = Json.format[guidSeq]
 
 
   private def generateInt(min: Int, max: Int): Int = (min, max) match {
@@ -53,7 +53,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1");
       else if (amount == 1) {
         val generatedResult = generateInt(min, max)
-        if (json) Ok(Json.toJson(Map("value" -> generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(Map("integer" -> generatedResult))) else Ok(Json.toJson(generatedResult))
       } else {
         val generatedResult = Seq.fill(amount)(generateInt(min, max))
         if (json) Ok(Json.toJson(integerSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
@@ -82,7 +82,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1")
       else if (amount == 1) {
         val generatedResult = generateDouble(min, max, accuracy)
-        if (json) Ok(Json.toJson(Map("value" -> generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(Map("double" -> generatedResult))) else Ok(Json.toJson(generatedResult))
       } else {
         val generatedResult = Seq.fill(amount)(generateDouble(min, max, accuracy))
         if (json) Ok(Json.toJson(doubleSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
@@ -111,10 +111,10 @@ object AlphaNumericBack extends Controller {
     if (amount < 1) BadRequest("Amount should be more then 1")
     else if (amount == 1) {
       val result = if (length == 30) alpha.getString else alpha.getString(length)
-      if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(Map("string" -> result))) else Ok(Json.toJson(result))
     } else {
       val result = Seq.fill(amount)(if (length == 60) alpha.getString else alpha.getString(length))
-      if (json) Ok(Json.toJson(stringSeq(result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(Map("string"->result))) else Ok(Json.toJson(result))
     }
   }
 
@@ -123,7 +123,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1");
       else {
         val generatedResult = alpha.getStrings(min, max, amount)
-        if (json) Ok(Json.toJson(stringSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(stringsSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
       }
     } catch {
       case e: IllegalArgumentException => BadRequest(e.getMessage)
@@ -135,10 +135,10 @@ object AlphaNumericBack extends Controller {
     if (amount < 1) BadRequest("Amount should be more then 1")
     else if (amount == 1) {
       val result = if (length == 40) alpha.hash else alpha.hash(length)
-      if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(Map("hash" -> result))) else Ok(Json.toJson(result))
     } else {
       val result = Seq.fill(amount)(if (length == 40) alpha.hash else alpha.hash(length))
-      if (json) Ok(Json.toJson(stringSeq(result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(hashesSeq(result))) else Ok(Json.toJson(result))
     }
   }
   
@@ -147,7 +147,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1");
       else {
         val generatedResult = alpha.hashList(min, max, amount)
-        if (json) Ok(Json.toJson(stringSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(hashesSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
       }
     } catch {
       case e: IllegalArgumentException => BadRequest(e.getMessage)
@@ -160,10 +160,10 @@ object AlphaNumericBack extends Controller {
     if (amount < 1) BadRequest("Amount should be more then 1")
     else if (amount == 1) {
       val result = if (length == 5) alpha.guid else alpha.guid(length)
-      if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(Map("guid" -> result))) else Ok(Json.toJson(result))
     } else {
       val result = Seq.fill(amount)(if (length == 5) alpha.guid else alpha.guid(length))
-      if (json) Ok(Json.toJson(stringSeq(result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(guidSeq(result))) else Ok(Json.toJson(result))
     }
   }
 
@@ -177,7 +177,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1");
       else {
         val generatedResult = alpha.letterifyList(pattern, amount)
-        if (json) Ok(Json.toJson(stringSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(stringsSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
       }
     } catch {
       case e: IllegalArgumentException => BadRequest(e.getMessage)
@@ -195,7 +195,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1");
       else {
         val generatedResult = alpha.numerifyList(pattern, amount)
-        if (json) Ok(Json.toJson(stringSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(stringsSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
       }
     } catch {
       case e: IllegalArgumentException => BadRequest(e.getMessage)
@@ -213,7 +213,7 @@ object AlphaNumericBack extends Controller {
       if (amount < 1) BadRequest("Amount should be more then 1");
       else {
         val generatedResult = alpha.botifyList(pattern, amount)
-        if (json) Ok(Json.toJson(stringSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
+        if (json) Ok(Json.toJson(stringsSeq(generatedResult))) else Ok(Json.toJson(generatedResult))
       }
     } catch {
       case e: IllegalArgumentException => BadRequest(e.getMessage)

@@ -13,9 +13,18 @@ object CalendarBack extends Controller {
   case class stringSeq(value: Seq[String])
   
   case class stringList(value: List[String])
+  
+  case class datesList(dates: Seq[String])
+  
+  case class datesRangeList(range: List[String])
 
   implicit def stringSeqWrite = Json.writes[stringSeq]
+  
   implicit def stringListWrite = Json.writes[stringList]
+  
+  implicit def datesListWrite = Json.format[datesList]
+  
+  implicit def datesRangeListWrite = Json.format[datesRangeList]
 
   private def getDate(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String): String =  {
     val finalYear = if (year == 0) cal.year.toInt else year
@@ -32,14 +41,14 @@ object CalendarBack extends Controller {
   }
 
   def time(twentyFourHours: Boolean, json: Boolean) = Action {
-    if (json) Ok(Json.toJson(Map("value" -> cal.time(twentyFourHours))))
+    if (json) Ok(Json.toJson(Map("time" -> cal.time(twentyFourHours))))
     else Ok(Json.toJson(cal.time(twentyFourHours)))
   }
 
   def date(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String, json: Boolean) = Action {
     try {
     val date = getDate(year, month, day, hour, minute, format)
-    if (json) Ok(Json.toJson(Map("value" -> date)))
+    if (json) Ok(Json.toJson(Map("date" -> date)))
       else Ok(Json.toJson(date))
     } catch {
       case e: IllegalAccessException => BadRequest(e.getMessage)
@@ -50,17 +59,17 @@ object CalendarBack extends Controller {
     if (amount < 1) BadRequest("Amount should be more then 1")
     else if (amount == 1) {
       val result = getDate(year, month, day, hour, minute, format)
-      if (json) Ok(Json.toJson(Map("value" -> result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(Map("dates" -> result))) else Ok(Json.toJson(result))
     } else {
       val result = Seq.fill(amount)(getDate(year, month, day, hour, minute, format))
-      if (json) Ok(Json.toJson(stringSeq(result))) else Ok(Json.toJson(result))
+      if (json) Ok(Json.toJson(datesList(result))) else Ok(Json.toJson(result))
     }
   }
   
   def datesRange(config: String , json: Boolean) = Action {
     val jsonConfig = Json.parse(config)
     val result = cal.datesRange(jsonConfig)
-    if (json) Ok(Json.toJson(stringList(result))) else Ok(Json.toJson(result))
+    if (json) Ok(Json.toJson((datesRangeList(result)))) else Ok(Json.toJson(result))
   }
   
   def relativeDate(startPoint: String, years: Int, months: Int, weeks: Int, days: Int, hours: Int, minutes: Int, format: String,  json: Boolean) = Action {
@@ -71,7 +80,7 @@ object CalendarBack extends Controller {
       val date = DateTimeFormat.forPattern(format).parseDateTime(startPoint)
       relativeDate = cal.dateRelative(date, years, months, weeks, days, hours, minutes, format)
     }
-    if (json) Ok(Json.toJson(Map("value" -> relativeDate))) else Ok(Json.toJson(relativeDate))
+    if (json) Ok(Json.toJson(Map("relative_date" -> relativeDate))) else Ok(Json.toJson(relativeDate))
   }
 
 
