@@ -30,7 +30,10 @@ GET        /api/v1/calendar/datesRange          controllers.CalendarBack.datesRa
 GET        /api/v1/calendar/relativeDate        controllers.CalendarBack.relativeDate(startPoint: String ?= "", years: Int ?= 0, months: Int ?= 0, weeks: Int ?= 0, days: Int ?= 0, hours: Int ?= 0, minutes: Int ?= 0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
 
 # Contact
-GET        /api/v1/contact/name                 controllers.ContactBack.name(json:Boolean ?= true )
+GET        /api/v1/contact/name                 controllers.ContactBack.name(json:Boolean ?= true, lang: String ?= "us")
+GET        /api/v1/contact/birthday             controllers.ContactBack.birthday(age:Int ?= 25, format: String ?= "dd-MM-yyyy", json:Boolean ?= true , lang: String ?= "us")
+GET        /api/v1/contact/address              controllers.ContactBack.address(json:Boolean ?= true , lang: String ?= "us")
+GET        /api/v1/contact/person               controllers.ContactBack.person(age: Int ?= 25, json:Boolean ?= true , lang: String ?= "us")
 
 # Finance
 GET        /api/v1/finance/creditcard           controllers.FinanceBack.creditCard(cardType: String ?= "master", json:Boolean ?= true )
