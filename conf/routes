@@ -73,7 +73,7 @@ GET        /api/v1/mobile/blackberry               controllers.MobileBack.blackb
 #Words
 GET        /api/v1/words/words                     controllers.WordsBack.getWords(json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/words/paragraph                 controllers.WordsBack.paragraph(length: Int ?= 100, json: Boolean ?= true)
-GET        /api/v1/words/sentence                  controllers.WordsBack.sentence(words: Int ?= 10, json: Boolean ?= true)
+GET        /api/v1/words/sentence                  controllers.WordsBack.sentence(wordsAmount: Int ?= 10, json: Boolean ?= true)
 
 
 # Map static resources from the /public folder to the /assets URL path
