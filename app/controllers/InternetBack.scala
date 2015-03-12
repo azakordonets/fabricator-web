@@ -60,7 +60,7 @@ object InternetBack extends Controller {
     }
   }
 
-  def macaddress(json: Boolean, amount: Int) = Action {
+  def macAddress(json: Boolean, amount: Int) = Action {
     if (amount == 1) {
       if (json) Ok(toJson(Map("macaddress" -> internet.UUID))) else Ok(internet.macAddress)
     }else {
@@ -105,7 +105,7 @@ object InternetBack extends Controller {
     }
   }
 
-  def googleanalytics(json: Boolean, amount: Int) = Action {
+  def googleAnalytics(json: Boolean, amount: Int) = Action {
     if (amount == 1) {
       if (json) Ok(toJson(Map("trackCode" -> internet.googleAnalyticsTrackCode))) else Ok(internet.googleAnalyticsTrackCode)
     }else {
@@ -114,7 +114,7 @@ object InternetBack extends Controller {
     }
   }
 
-  def facebookid(json: Boolean, amount: Int) = Action {
+  def facebookId(json: Boolean, amount: Int) = Action {
     if (amount == 1) {
       if (json) Ok(toJson(Map("id" -> internet.facebookId))) else Ok(internet.facebookId)
     }else {
@@ -122,7 +122,4 @@ object InternetBack extends Controller {
       if (json) Ok(toJson(facebookIdsSeq(facebookIds))) else Ok(toJson(facebookIds))
     }
   }
-
-
-
 }
