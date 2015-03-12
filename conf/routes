@@ -45,7 +45,7 @@ GET        /api/v1/finance/creditcards             controllers.FinanceBack.credi
 
 # Internet
 GET        /api/v1/internet/appleToken             controllers.InternetBack.appleToken(json:Boolean ?= true, amount: Int ?= 1)
-GET        /api/v1/internet/url                    controllers.InternetBack.url(protocol: String ?= "http", host: String, callName: String ?= "get", json: Boolean ?= true, amount: Int ?= 1)
+GET        /api/v1/internet/url                    controllers.InternetBack.url(protocol: String ?= "http", host: String ?= "test.com", callName: String ?= "get", json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/ip                     controllers.InternetBack.ip(ipv6: Boolean ?= false, json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/macaddress             controllers.InternetBack.macaddress(json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/uuid                   controllers.InternetBack.uuid(json: Boolean ?= true, amount: Int ?= 1)
