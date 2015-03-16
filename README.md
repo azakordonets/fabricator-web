@@ -7,6 +7,19 @@ web interface. Demo of the application can be found [here](fabricator-web.heroku
 API allows you to get fake test date with REST API calls. Below you can find a description for every available call. Please note that data can be 
 received in two formats : json and plain text. By default json format is returned. To get plain text response just specify ```json=false``` in the call.
 
+## How to install 
+
+First you need to install [Typesafe Activator](https://typesafe.com/get-started) . After that 
+
+```bash 
+
+git clone https://github.com/azakordonets/fabricator-web.git
+
+cd fabricator-web
+
+activator run 
+```
+
 ## Usage
 
 Just as fabricator library, available data can be divided into set of groups : 
