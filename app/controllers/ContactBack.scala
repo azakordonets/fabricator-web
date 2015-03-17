@@ -11,7 +11,7 @@ object ContactBack extends Controller{
   private def checkLanguage(lang: String) = {if (!lang.equals(Language.US.toString)) contact = fabricator.Contact(lang)}
   
   case class Name(name: Map[String, String])
-  case class Address(address: Map[String, String])
+  case class Address(address_details: Map[String, String])
   case class Birthday(birthday: String)
   
   implicit def nameFormat = Json.format[Name]
@@ -52,9 +52,11 @@ object ContactBack extends Controller{
   
   def name(json: Boolean, lang: String) = Action {
     checkLanguage(lang)
-    val name = Map("first_name" -> contact.firstName,
-                   "last_name" -> contact.lastName,
-                   "full_name" -> contact.fullName(false)) // TODO fix this method when new version of library will apper
+    val firstName = contact.firstName
+    val lastName = contact.lastName
+    val name = Map("first_name" -> firstName,
+                   "last_name" -> lastName,
+                   "full_name" -> String.format("%s %s", firstName, lastName))
     if (json) Ok(toJson(Name(name))) else Ok(toJson(contact.fullName(false)))
   }
 

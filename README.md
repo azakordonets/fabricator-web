@@ -118,7 +118,7 @@ http://localhost:9000/api/v1/contact/birthday // {"birthday":"14-03-1990"}
 
 http://localhost:9000/api/v1/contact/birthday?age=34&format=dd/MM/yyyy // {"birthday":"14/03/1981"}
  
-http://localhost:9000/api/v1/contact/address // {"address":{"house_number":"534","phone_number":"1-920-653-1902 x363","state":"Colorado","state_short_code":"SD","postcode":"42932-2576","street_name":"Heights","company":"LLC","address":"Point 59752, Apt. 904","appartment_number":"Suite 309"}}
+http://localhost:9000/api/v1/contact/address // {"address_details":{"house_number":"534","phone_number":"1-920-653-1902 x363","state":"Colorado","state_short_code":"SD","postcode":"42932-2576","street_name":"Heights","company":"LLC","address":"Point 59752, Apt. 904","appartment_number":"Suite 309"}}
  
 http://localhost:9000/api/v1/contact/person // {"name":{"first_name":"Maryjane","last_name":"Windler","full_name":"Jerrod Farrell"},"address":{"house_number":"8401","phone_number":"(022)608-0224","state":"New Hampshire","state_short_code":"KY","postcode":"94006-4598","street_name":"Meadow","company":"LLC","address":"Loop 919, Apt. 228","appartment_number":"Suite 412"},"birthday":"14-03-1990","email":"jeromy_ryan171@gmail.com","bsn":"457227540","religion":"Confucianism","zodiac":"Pisces","height":"1.5757365990787684 cm","weight":"57 kg","blood_type":"A-","occupation":"Student Admissions Administrator"}
 ```
