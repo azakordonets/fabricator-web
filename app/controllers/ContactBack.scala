@@ -81,11 +81,14 @@ object ContactBack extends Controller{
     if (json) Ok(toJson(Address(address))) else Ok(toJson(addressString))
   }
 
-  def person(age: Int, metric: Boolean, lang: String) = Action {
+  def person(age: Int, cm: Boolean, lang: String) = Action {
     checkLanguage(lang)
-    val name = Map("first_name" -> contact.firstName,
-      "last_name" -> contact.lastName,
-      "full_name" -> contact.fullName(false))
+    val first_name = contact.firstName
+    val last_name = contact.lastName
+    val full_name = String.format("%s %s", first_name, last_name)
+    val name = Map("first_name" -> first_name,
+      "last_name" -> last_name,
+      "full_name" -> full_name)
     val address = Map("phone_number" -> contact.phoneNumber,
       "street_name" -> contact.streetName,
       "house_number" -> contact.houseNumber,
@@ -104,7 +107,7 @@ object ContactBack extends Controller{
                      "bsn" -> contact.bsn,
                      "religion" -> contact.religion,
                      "zodiac" -> contact.zodiac(contact.birthday(age)),
-                     "height" -> contact.height(metric),
+                     "height" -> contact.height(cm),
                      "weight" -> contact.weight,
                      "blood_type" -> contact.bloodType,
                      "occupation" -> contact.occupation
