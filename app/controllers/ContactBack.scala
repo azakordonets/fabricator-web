@@ -54,10 +54,11 @@ object ContactBack extends Controller{
     checkLanguage(lang)
     val firstName = contact.firstName
     val lastName = contact.lastName
+    val fullName = String.format("%s %s", firstName, lastName)
     val name = Map("first_name" -> firstName,
                    "last_name" -> lastName,
-                   "full_name" -> String.format("%s %s", firstName, lastName))
-    if (json) Ok(toJson(Name(name))) else Ok(toJson(contact.fullName(false)))
+                   "full_name" -> fullName)
+    if (json) Ok(toJson(Name(name))) else Ok(toJson(fullName))
   }
 
   def birthday(age: Int, format: String,  json: Boolean, lang: String) = Action{
