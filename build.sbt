@@ -24,6 +24,8 @@ resolvers += "Fabricator" at "http://dl.bintray.com/biercoff/Fabricator"
 
 libraryDependencies += "com.github.azakordonets" % "fabricator_2.10" % "1.0.3"
 
+libraryDependencies += "com.adrianhurt" %% "play-bootstrap3" % "0.4"
+
 libraryDependencies ++= Seq(
     jdbc,
     anorm,

@@ -62,7 +62,7 @@ object InternetBack extends Controller {
 
   def macAddress(json: Boolean, amount: Int) = Action {
     if (amount == 1) {
-      if (json) Ok(toJson(Map("macaddress" -> internet.UUID))) else Ok(internet.macAddress)
+      if (json) Ok(toJson(Map("macaddress" -> internet.macAddress))) else Ok(internet.macAddress)
     }else {
       val tokensSeq = Seq.fill(amount)(internet.macAddress)
       if (json) Ok(toJson(macAddressSeq(tokensSeq))) else Ok(toJson(tokensSeq))
@@ -78,11 +78,12 @@ object InternetBack extends Controller {
     }
   }
 
-  def color(format: String, greyscale: Boolean, json: Boolean, amount: Int) = Action {
+  def getColor(format: String, greyscale: Boolean, json: Boolean, amount: Int) = Action {
     if (amount == 1) {
-      if (json) Ok(toJson(Map("color" -> internet.color(format, greyscale)))) else Ok(internet.color(format, greyscale))
+      val colorValue = internet.color(format, greyscale).replaceAll("rgb", "")
+      if (json) Ok(toJson(Map("color" -> colorValue))) else Ok(colorValue)
     }else {
-      val colors = Seq.fill(amount)(internet.color(format, greyscale))
+      val colors = Seq.fill(amount)(internet.color(format, greyscale).replaceAll("rgb",""))
       if (json) Ok(toJson(colorsSeq(colors))) else Ok(toJson(colors))
     }
   }

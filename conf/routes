@@ -49,7 +49,7 @@ GET        /api/v1/internet/url                    controllers.InternetBack.url(
 GET        /api/v1/internet/ip                     controllers.InternetBack.ip(ipv6: Boolean ?= false, json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/macaddress             controllers.InternetBack.macAddress(json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/uuid                   controllers.InternetBack.uuid(json: Boolean ?= true, amount: Int ?= 1)
-GET        /api/v1/internet/color                  controllers.InternetBack.color(format: String ?= "hex", greyscale: Boolean ?= false, json: Boolean ?= true, amount: Int ?= 1)
+GET        /api/v1/internet/color                  controllers.InternetBack.getColor(format: String ?= "hex", greyscale: Boolean ?= false, json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/twitter                controllers.InternetBack.twitter(json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/hashtag                controllers.InternetBack.hashtag(json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/internet/googleanalytics        controllers.InternetBack.googleAnalytics(json: Boolean ?= true, amount: Int ?= 1)
