@@ -61,7 +61,7 @@ GET        /api/v1/location/depth                  controllers.LocationBack.dept
 GET        /api/v1/location/coordinates            controllers.LocationBack.coordinates(accuracy: Int ?= 5, json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/location/latitude               controllers.LocationBack.latitude(accuracy: Int ?= 5, json: Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/location/longitude              controllers.LocationBack.longitude(accuracy: Int ?= 5, json: Boolean ?= true, amount: Int ?= 1)
-GET        /api/v1/location/geohash                controllers.LocationBack.geohash(json: Boolean ?= true, amount: Int ?= 1)
+GET        /api/v1/location/geohash                controllers.LocationBack.getGeohash(json: Boolean ?= true, amount: Int ?= 1)
 
 #Mobile
 GET        /api/v1/mobile/android                  controllers.MobileBack.android(json: Boolean ?= true, amount: Int ?= 1)

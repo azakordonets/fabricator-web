@@ -67,7 +67,7 @@ object LocationBack extends Controller{
     }
   }
 
-  def geohash(json: Boolean, amount: Int) = Action {
+  def getGeohash(json: Boolean, amount: Int) = Action {
     if (amount == 1) {
       if (json) Ok(toJson(Map("geohash" -> location.geohash))) else Ok(location.geohash)
     } else {
