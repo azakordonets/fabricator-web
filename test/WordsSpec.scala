@@ -77,19 +77,23 @@ class WordsSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val sentenceToken = contentAsJson(result).\("sentence").as[String]
-      sentenceToken must not(beNull[String])
-      sentenceToken.size must be equalTo 100
+      val sentenceTokens = contentAsJson(result).\("sentence").as[String].split(" ")
+      sentenceTokens.size must be equalTo 10
+      for (sentenceToken <- sentenceTokens){
+        sentenceToken must not(beNull[String])
+      }
     }
 
     "return random sentence " in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/words/sentence?length=200"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/words/sentence?wordsAmount=200"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val sentenceToken = contentAsJson(result).\("sentence").as[String]
-      sentenceToken must not(beNull[String])
-      sentenceToken.size must be equalTo 200
+      val sentenceTokens = contentAsJson(result).\("sentence").as[String].split(" ")
+      sentenceTokens.size must be equalTo 200
+      for (sentenceToken <- sentenceTokens){
+        sentenceToken must not(beNull[String])
+      }
     }
 
     "return random sentenceToken in plain format" in new WithApplication {
@@ -97,9 +101,11 @@ class WordsSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("text/plain")
       charset(result) must beSome("utf-8")
-      val sentenceToken = contentAsString(result)
-      sentenceToken must not(beNull[String])
-      sentenceToken.size must be equalTo 100
+      val sentenceTokens = contentAsString(result).split(" ")
+      sentenceTokens.size must be equalTo 10
+      for (sentenceToken <- sentenceTokens){
+        sentenceToken must not(beNull[String])
+      }
     }
   }
 
