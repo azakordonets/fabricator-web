@@ -1,5 +1,5 @@
-import org.joda.time.{Years, DateTime}
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import org.joda.time.{DateTime, Years}
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
 import play.api.libs.json.JsObject
@@ -68,12 +68,12 @@ class ContactSpec extends PlaySpecification {
     }
 
     "return birthday date of 25 years old person with custom date format in json format" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/contact/birthday?format=dd/MM/yyyy"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/contact/birthday?format=dd/MM/YYYY"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("birthday").as[String]
-      val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy")
+      val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY")
       val birthdate: DateTime = formatter.parseDateTime(responseResult)
       val today: DateTime = DateTime.now()
       val years: Years = Years.yearsBetween(birthdate, today)
@@ -112,7 +112,7 @@ class ContactSpec extends PlaySpecification {
       val streetName = (responseResult \ "street_name").as[String]
       val company = (responseResult \ "company").as[String]
       val address = (responseResult \ "address").as[String]
-      val appartmentNumber = (responseResult \ "appartment_number").as[String]
+      val appartmentNumber = (responseResult \ "apartment_number").as[String]
       // assertion
       houseNumber must not(beNull[String])
       phoneNumber must not(beNull[String])

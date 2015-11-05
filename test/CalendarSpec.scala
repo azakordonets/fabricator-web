@@ -88,7 +88,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return random date in specific hour" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/date?hour=2&format=dd-MM-yyyy hh:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/date?hour=2&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -103,7 +103,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return random date in specific minute" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/date?minute=20&format=dd-MM-yyyy hh:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/date?minute=20&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -169,7 +169,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return Sequence of random date in specific hour" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/dates?hour=2&format=dd-MM-yyyy hh:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/dates?hour=2&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -187,12 +187,12 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return Sequence of random date in specific minute" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/dates?minute=20&format=dd-MM-yyyy hh:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/dates?minute=20&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("dates").as[Array[String]]
-      val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
+      val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm")
       responseResult must have size 100
       for (response <- responseResult) {
         val date = formatter.parseDateTime(response)
@@ -216,26 +216,6 @@ class CalendarSpec extends PlaySpecification {
       for (response <- responseResult) {
         val date = formatter.parseDateTime(response)
         date.getYear must be equalTo 2000
-        date.getMonthOfYear must beBetween(1, 12)
-        date.getDayOfMonth must beBetween(1, 31)
-      }
-    }
-  }
-
-  "REST API /api/v1/calendar/datesRange" should {
-
-    "return Sequence of random date in specified range with specified year step " in new WithApplication {
-      val rangeCongif = "{\"start\":{\"year\":2001},\"end\":{\"year\":2010},\"step\":{\"year\":1}}"
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/datesRange?config=" + rangeCongif))
-      status(result) must equalTo(OK)
-      contentType(result) must beSome("application/json")
-      charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("range").as[Array[String]]
-      val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy hh:mm")
-      responseResult must have size 10
-      for (response <- responseResult) {
-        val date = formatter.parseDateTime(response)
-        date.getYear must beBetween(2001, 2010)
         date.getMonthOfYear must beBetween(1, 12)
         date.getDayOfMonth must beBetween(1, 31)
       }
@@ -285,7 +265,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return - 2 hours date from now" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?hours=-2&format=dd-MM-yyyy HH:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?hours=-2&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -295,7 +275,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return - 2 minutes date from now" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?minutes=-2&format=dd-MM-yyyy HH:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?minutes=-2&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -305,7 +285,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return - 2 years, -2 months, -2 weeks, -2 days, -2hours, -2 minutes date from now" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?years=-2&months=-2&weeks=-2&days=-2&hours=-2&minutes=-2&format=dd-MM-yyyy HH:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?years=-2&months=-2&weeks=-2&days=-2&hours=-2&minutes=-2&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
@@ -315,7 +295,7 @@ class CalendarSpec extends PlaySpecification {
     }
 
     "return +3 years, +3 months, +3 weeks, +3 days, +3hours, +3 minutes date from now" in new WithApplication {
-      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?years=3&months=3&weeks=3&days=3&hours=3&minutes=3&format=dd-MM-yyyy HH:mm"))
+      val Some(result) = route(FakeRequest(GET, "/api/v1/calendar/relativeDate?years=3&months=3&weeks=3&days=3&hours=3&minutes=3&format=dd-MM-yyyy%20HH:mm"))
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")

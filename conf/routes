@@ -4,6 +4,7 @@
 
 # Home page
 GET        /                                       controllers.Application.index
+GET        /aboutus                                controllers.Application.index
 # Alphanumeric
 GET        /api/v1/alpha/integer                   controllers.AlphaNumericBack.integer(min: Int ?= 0, max: Int ?= 0, json:Boolean ?= true, amount: Int ?= 1)
 GET        /api/v1/alpha/double                    controllers.AlphaNumericBack.double(min: Double ?= 0.0, max: Double ?= 0.0, json:Boolean ?= true, accuracy: Int ?= 1, amount: Int ?= 1)
@@ -26,7 +27,6 @@ GET        /api/v1/alpha/range/botify              controllers.AlphaNumericBack.
 GET        /api/v1/calendar/time                   controllers.CalendarBack.time(twentyFourHours: Boolean ?= true, json:Boolean ?= true )
 GET        /api/v1/calendar/date                   controllers.CalendarBack.date(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
 GET        /api/v1/calendar/dates                  controllers.CalendarBack.dates(year: Int ?= 0, month: Int ?=0, day: Int ?= 0, hour: Int ?= 0, minute:Int ?=0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true , amount: Int ?= 100)
-GET        /api/v1/calendar/datesRange             controllers.CalendarBack.datesRange(config: String , json: Boolean ?= true)
 GET        /api/v1/calendar/relativeDate           controllers.CalendarBack.relativeDate(startPoint: String ?= "", years: Int ?= 0, months: Int ?= 0, weeks: Int ?= 0, days: Int ?= 0, hours: Int ?= 0, minutes: Int ?= 0, format: String ?= "dd-MM-yyyy", json:Boolean ?= true )
 
 # Contact

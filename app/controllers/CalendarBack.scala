@@ -3,10 +3,9 @@ package controllers
 import org.joda.time.IllegalInstantException
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.Json
-import play.api.mvc.Controller
 import play.api.mvc.Action
 
-object CalendarBack extends Controller {
+object CalendarBack extends ControllerBase {
 
   private val cal = fabricator.Calendar()
 
@@ -30,10 +29,10 @@ object CalendarBack extends Controller {
     val finalYear = if (year == 0) cal.year.toInt else year
     val finalMonth = if (month == 0) cal.month.toInt else month
     val finalDay = if (day == 0) cal.day(finalYear, finalMonth).toInt else day
-    val finalHour = if (hour == 0) cal.hour.toInt else hour
+    val finalHour = if (hour == 0) cal.hour12h.toInt else hour
     val finalMinute = if (minute == 0) cal.minute.toInt else minute
     try {
-      cal.date(finalYear, finalMonth, finalDay, finalHour, finalMinute, format)
+      cal.randomDate.inYear(finalYear).inMonth(finalMonth).inDay(finalDay).inHour(finalHour).inMinute(finalMinute).asString(matchFormat(format))
     } catch {
       case e:IllegalInstantException => getDate(finalYear, finalMonth, finalDay+1, finalHour, finalMinute, format)
       
@@ -41,8 +40,9 @@ object CalendarBack extends Controller {
   }
 
   def time(twentyFourHours: Boolean, json: Boolean) = Action {
-    if (json) Ok(Json.toJson(Map("time" -> cal.time(twentyFourHours))))
-    else Ok(Json.toJson(cal.time(twentyFourHours)))
+    val time = if (twentyFourHours) cal.time24h else cal.time12h
+    if (json) Ok(Json.toJson(Map("time" -> time)))
+    else Ok(Json.toJson(time))
   }
 
   def date(year: Int, month: Int, day: Int, hour: Int, minute: Int, format: String, json: Boolean) = Action {
@@ -66,22 +66,17 @@ object CalendarBack extends Controller {
     }
   }
   
-  def datesRange(config: String , json: Boolean) = Action {
-    val jsonConfig = Json.parse(config)
-    val result = cal.datesRange(jsonConfig)
-    if (json) Ok(Json.toJson((datesRangeList(result)))) else Ok(Json.toJson(result))
-  }
-  
   def relativeDate(startPoint: String, years: Int, months: Int, weeks: Int, days: Int, hours: Int, minutes: Int, format: String,  json: Boolean) = Action {
     var relativeDate = ""
     if (startPoint.equals("")){
-      relativeDate = cal.dateRelative(years, months, weeks, days, hours, minutes, format)
+      relativeDate = cal.relativeDate.years(years).months(months).weeks(weeks).days(days).hours(hours).minutes(minutes).asString(matchFormat(format))
     }else {
       val date = DateTimeFormat.forPattern(format).parseDateTime(startPoint)
-      relativeDate = cal.dateRelative(date, years, months, weeks, days, hours, minutes, format)
+      relativeDate = cal.relativeDate.years(years).months(months).weeks(weeks).days(days).hours(hours).minutes(minutes).asString(matchFormat(format))
     }
     if (json) Ok(Json.toJson(Map("relative_date" -> relativeDate))) else Ok(Json.toJson(relativeDate))
   }
+
 
 
 

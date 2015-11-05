@@ -1,10 +1,10 @@
 package controllers
 
-import play.api.libs.json._
 import play.api.libs.json.Json.toJson
-import play.api.mvc.{Action, Controller}
+import play.api.libs.json._
+import play.api.mvc.Action
 
-object ContactBack extends Controller{
+object ContactBack extends ControllerBase{
 
   private var contact = fabricator.Contact()
   
@@ -63,7 +63,8 @@ object ContactBack extends Controller{
 
   def birthday(age: Int, format: String,  json: Boolean, lang: String) = Action{
     checkLanguage(lang)
-    if (json) Ok(toJson(Birthday(contact.birthday(age, format)))) else Ok(toJson(contact.birthday(age, format)))
+    val birthday: String = contact.birthday(age, matchFormat(format))
+    if (json) Ok(toJson(Birthday(birthday))) else Ok(toJson(birthday))
   }
 
   def address(json: Boolean, lang: String) = Action {
@@ -71,7 +72,7 @@ object ContactBack extends Controller{
     val address = Map("phone_number" -> contact.phoneNumber,
                       "street_name" -> contact.streetName,
                       "house_number" -> contact.houseNumber,
-                      "appartment_number" -> contact.apartmentNumber,
+                      "apartment_number" -> contact.apartmentNumber,
                       "postcode" -> contact.postcode,
                       "address" -> contact.address,
                       "state" -> contact.state,
@@ -109,7 +110,7 @@ object ContactBack extends Controller{
                      "religion" -> contact.religion,
                      "zodiac" -> contact.zodiac(contact.birthday(age)),
                      "height" -> contact.height(cm),
-                     "weight" -> contact.weight,
+                     "weight" -> contact.weight(true),
                      "blood_type" -> contact.bloodType,
                      "occupation" -> contact.occupation
     )

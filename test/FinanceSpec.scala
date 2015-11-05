@@ -1,6 +1,6 @@
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
-import play.api.test.{FakeRequest, WithApplication, PlaySpecification}
+import play.api.test.{FakeRequest, PlaySpecification, WithApplication}
 
 @RunWith(classOf[JUnitRunner])
 class FinanceSpec extends PlaySpecification{
@@ -128,7 +128,7 @@ class FinanceSpec extends PlaySpecification{
         visa must not(beNull[String])
         visa must have size 16
       }
-    }.pendingUntilFixed("Waiting for bug fix in fabricator library - https://github.com/azakordonets/fabricator/issues/12")
+    }
 
     "return array of random visa card numbers in plain text" in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/finance/creditcards?cardType=visa&json=false"))
@@ -139,9 +139,9 @@ class FinanceSpec extends PlaySpecification{
       visas must have size 10
       for (visa <- visas){
         visa must not(beNull[String])
-        visa must have size 16
+        visa must have size 18
       }
-    }.pendingUntilFixed("Waiting for bug fix in fabricator library - https://github.com/azakordonets/fabricator/issues/12")
+    }
 
     "return array of random american express card numbers" in new WithApplication {
       val Some(result) = route(FakeRequest(GET, "/api/v1/finance/creditcards?cardType=americanExpress"))

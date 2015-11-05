@@ -41,11 +41,11 @@ object InternetBack extends Controller {
   }
 
   def url(protocol: String, host: String, callName: String, json: Boolean, amount: Int) = Action {
-    val url = internet.url(protocol, host, callName, Map("" -> ""))
+    val url = internet.urlBuilder.scheme(protocol).host(host).path(callName).toString()
     if (amount == 1) {
       if (json) Ok(toJson(Map("url" -> url))) else Ok(url)
     } else {
-      val urls = Seq.fill(amount)(internet.url(protocol, host, callName, Map("" -> "")))
+      val urls = Seq.fill(amount)(internet.urlBuilder.scheme(protocol).host(host).path(callName).toString())
       if (json) Ok(toJson(urlSeq(urls))) else Ok(toJson(urls))
     }
   }

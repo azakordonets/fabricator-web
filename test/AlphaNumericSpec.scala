@@ -1,5 +1,3 @@
-import java.nio.charset.Charset
-
 import org.junit.runner._
 import org.specs2.runner._
 import play.api.test._
@@ -49,7 +47,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("integers").validate[Array[Int]].get
-      responseResult should have size (100)
+      responseResult should have size 100
       assert(responseResult.isInstanceOf[Array[Int]])
     }
 
@@ -60,7 +58,7 @@ class AlphaNumericSpec extends PlaySpecification {
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("integers").validate[Array[Int]].get
       assert(responseResult.isInstanceOf[Array[Int]])
-      responseResult should have size (100)
+      responseResult should have size 100
       for (number <- responseResult) assert(number >= 100 && number <= 200)
     }
 
@@ -71,7 +69,7 @@ class AlphaNumericSpec extends PlaySpecification {
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("integers").validate[Array[Int]].get
       assert(responseResult.isInstanceOf[Array[Int]])
-      responseResult should have size (51)
+      responseResult should have size 51
       for (number <- responseResult) assert(number >= 100 && number <= 200)
     }
 
@@ -151,7 +149,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("doubles").validate[Array[Double]].get
-      responseResult must have size (100)
+      responseResult must have size 100
       assert(responseResult.isInstanceOf[Array[Double]])
     }
 
@@ -162,7 +160,7 @@ class AlphaNumericSpec extends PlaySpecification {
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("doubles").validate[Array[Double]].get
       assert(responseResult.isInstanceOf[Array[Double]])
-      responseResult must have size (100)
+      responseResult must have size 100
       for (number <- responseResult) {
         number must be >= 100.0  
         number must be <= 200.0
@@ -176,7 +174,7 @@ class AlphaNumericSpec extends PlaySpecification {
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("doubles").validate[Array[Double]].get
       assert(responseResult.isInstanceOf[Array[Double]])
-      responseResult must have size (51)
+      responseResult must have size 51
       for (number <- responseResult) {
         number must be >= 100.0
         number must be <= 200.0
@@ -217,7 +215,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("string").validate[String].get
-      responseResult must have size (30)
+      responseResult must have size 30
     }
 
     "return random String with custom length of 2000 symbols" in new WithApplication {
@@ -226,7 +224,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("string").validate[String].get
-      responseResult must have size (2000)
+      responseResult must have size 2000
     }
 
     "return random String with default length of 30 symbols as a String response" in new WithApplication {
@@ -235,7 +233,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result).mkString
-      responseResult must have size (32)
+      responseResult must have size 32
     }
 
     "return Sequence of random Strings with default length of 30 symbols" in new WithApplication {
@@ -244,8 +242,8 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("string").validate[Array[String]].get
-      responseResult should have size (100)
-      for (string <- responseResult) string must have size (30)
+      responseResult should have size 100
+      for (string <- responseResult) string must have size 30
     }
 
     "return Sequence of random Strings with custom length of 100 symbols" in new WithApplication {
@@ -254,8 +252,8 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("string").validate[Array[String]].get
-      responseResult must have size (100)
-      for (string <- responseResult) string must have size (100)
+      responseResult must have size 100
+      for (string <- responseResult) string must have size 100
     }
 
     "return Sequence of random Strings with custom length from 10 to 20 " in new WithApplication {
@@ -264,7 +262,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("strings").validate[Array[String]].get
-      responseResult must have size (100)
+      responseResult must have size 100
       for (string <- responseResult) {
         string.length must be >= 10
         string.length must be <= 20
@@ -288,8 +286,9 @@ class AlphaNumericSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("hash").validate[String].get
-      responseResult must have size (40)
+      val responseResult = contentAsJson(result).\("randomHash").validate[String].get
+      println(responseResult.length)
+      responseResult must have size 40
     }
 
     "return random Hash with custom length of 2000 symbols" in new WithApplication {
@@ -297,8 +296,8 @@ class AlphaNumericSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("hash").validate[String].get
-      responseResult must have size (2000)
+      val responseResult = contentAsJson(result).\("randomHash").validate[String].get
+      responseResult must have size 2000
     }
 
     "return random Hash with default length of 40 symbols as a Hash response" in new WithApplication {
@@ -307,7 +306,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result).mkString
-      responseResult must have size (42)
+      responseResult must have size 42
     }
 
     "return Sequence of random Strings with default length of 40 symbols" in new WithApplication {
@@ -316,8 +315,8 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("hashes").validate[Array[String]].get
-      responseResult should have size (100)
-      for (hash <- responseResult) hash must have size(40)
+      responseResult should have size 100
+      for (hash <- responseResult) hash must have size 40
     }
 
     "return Sequence of random Strings with custom length of 100 symbols" in new WithApplication {
@@ -326,8 +325,8 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("hashes").validate[Array[String]].get
-      responseResult must have size (100)
-      for (hash <- responseResult) hash must have size (100)
+      responseResult must have size 100
+      for (hash <- responseResult) hash must have size 100
     }
 
     "return Sequence of random Strings with custom length [20, 60] symbols" in new WithApplication {
@@ -336,7 +335,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("hashes").validate[Array[String]].get
-      responseResult must have size (100)
+      responseResult must have size 100
       for (hash <- responseResult) {
         hash.length must be >= 20
         hash.length must be <= 60
@@ -361,8 +360,8 @@ class AlphaNumericSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("guid").validate[String].get
-      responseResult must have size (36)
+      val responseResult = contentAsJson(result).\("randomGuid").validate[String].get
+      responseResult must have size 36
       responseResult must beMatching("\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}")
     }
 
@@ -371,8 +370,8 @@ class AlphaNumericSpec extends PlaySpecification {
       status(result) must equalTo(OK)
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
-      val responseResult = contentAsJson(result).\("guid").validate[String].get
-      responseResult must have size (39)
+      val responseResult = contentAsJson(result).\("randomGuid").validate[String].get
+      responseResult must have size 39
     }
 
     "return random Guid with default length of 36 symbols as a text response" in new WithApplication {
@@ -381,7 +380,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsString(result).mkString
-      responseResult must have size (38)
+      responseResult must have size 38
     }
 
     "return Sequence of random Strings with default length of 36 symbols" in new WithApplication {
@@ -390,8 +389,8 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("guids").validate[Array[String]].get
-      responseResult should have size (100)
-      for (guid <- responseResult) guid must have size (36)
+      responseResult should have size 100
+      for (guid <- responseResult) guid must have size 36
     }
 
     "return Sequence of random Strings with custom length of 100 symbols" in new WithApplication {
@@ -400,9 +399,9 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("guids").validate[Array[String]].get
-      responseResult must have size (100)
+      responseResult must have size 100
       for (guid <- responseResult) {
-        guid must have size (38)
+        guid must have size 38
         guid must beMatching("\\w{8}-\\w{4}-\\w{4,6}-\\w{4}-\\w{12}")
       }
     }
@@ -434,7 +433,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[String].get
-      responseResult must have size ("????21312".length)
+      responseResult must have size "????21312".length
       responseResult must beMatching("\\w{4}\\d{5}")
     }
 
@@ -457,7 +456,7 @@ class AlphaNumericSpec extends PlaySpecification {
       val responseResult = contentAsJson(result).\("strings").validate[Array[String]].get
       responseResult must have size 100
       for (string <- responseResult){
-        string must have size ("????21312".length)
+        string must have size "????21312".length
         string must beMatching("\\w{4}\\d{5}")
       }
     }
@@ -471,7 +470,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[String].get
-      responseResult must have size ("###ABC".length)
+      responseResult must have size "###ABC".length
       responseResult must beMatching("\\d{3}\\w{3}")
     }
 
@@ -494,7 +493,7 @@ class AlphaNumericSpec extends PlaySpecification {
       val responseResult = contentAsJson(result).\("strings").validate[Array[String]].get
       responseResult must have size 100
       for (string <- responseResult) {
-        string must have size ("###ABC".length)
+        string must have size "###ABC".length
         string must beMatching("\\d{3}\\w{3}")
       }
     }
@@ -519,7 +518,7 @@ class AlphaNumericSpec extends PlaySpecification {
       contentType(result) must beSome("application/json")
       charset(result) must beSome("utf-8")
       val responseResult = contentAsJson(result).\("value").validate[String].get
-      responseResult must have size ("???###".length)
+      responseResult must have size "???###".length
       responseResult must beMatching("\\w{3}\\d{3}")
     }
 
@@ -543,7 +542,7 @@ class AlphaNumericSpec extends PlaySpecification {
       val responseResult = contentAsJson(result).\("strings").validate[Array[String]].get
       responseResult must have size 100
       for (string <- responseResult) {
-        string must have size ("???###".length)
+        string must have size "???###".length
         string must beMatching("\\w{3}\\d{3}")
       }
     }
